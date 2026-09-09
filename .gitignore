@@ -1,0 +1,9 @@
+
+# Arquivos gerados pelos testes
+reports/
+evidencias/
+screenshots/
+__pycache__/
+*.pyc
+venv/
+.pytest_cache/
