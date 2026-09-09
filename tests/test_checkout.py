@@ -34,7 +34,7 @@ def test_checkout_flow(page: Page):
     expect(checkout_page.address_delivery).to_contain_text("Idna")
 
     # Finaliza o pedido
-    checkout_page.place_order_button.click()
+    checkout_page.go_to_payment()
 
     # Preenche cartão de teste e paga
     payment_page = PaymentPage(page)

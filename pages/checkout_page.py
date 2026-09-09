@@ -7,6 +7,14 @@ class CheckoutPage:
         self.address_delivery = page.locator("#address_delivery")
         self.place_order_button = page.locator("a.check_out")
 
+    def go_to_payment(self):
+        for _ in range(3):
+            self.place_order_button.click()
+            self.page.wait_for_timeout(2000)
+            if "payment" in self.page.url:
+                return
+        raise Exception("Nao foi possivel navegar ate a pagina de pagamento apos varias tentativas")
+
 
 class PaymentPage:
     def __init__(self, page: Page):
