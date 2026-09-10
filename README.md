@@ -95,6 +95,24 @@ Este projeto conta com um pipeline configurado no **GitHub Actions** (`.github/w
 2. Configuração do ambiente Python
 3. Instalação das dependências
 4. Execução dos testes com Pytest
+   
+
+## 🧩 Desafios Técnicos
+
+Durante o desenvolvimento, identifiquei uma instabilidade intermitente no teste de checkout: ele passava localmente, mas falhava às vezes no pipeline de CI.
+
+Investigando os logs, percebi que a URL da página no momento da falha continha um parâmetro de anúncio (`google_vignette`) — ou seja, um pop-up publicitário do próprio site estava interceptando o clique no botão de finalizar compra antes da navegação acontecer.
+
+**Solução:** implementei uma lógica de retry no método `go_to_payment()`, que tenta o clique até três vezes, validando a cada tentativa se a navegação para a página de pagamento realmente ocorreu:
+
+```python
+def go_to_payment(self):
+    for _ in range(3):
+        self.place_order_button.click()
+        self.page.wait_for_timeout(2000)
+        if "payment" in self.page.url:
+            return
+    raise Exception("Nao foi possivel navegar ate a pagina de pagamento apos varias tentativas")
 
 ## 📊 Relatórios
 
