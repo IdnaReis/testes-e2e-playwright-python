@@ -100,6 +100,8 @@ Este projeto conta com um pipeline configurado no **GitHub Actions** (`.github/w
 
 Após cada execução, um relatório HTML detalhado é gerado, contendo o status de cada teste e evidências (screenshots) em caso de falha.
 
+![Relatório de testes](docs/relatorio-testes.png)
+
 ## 👩‍💻 Autora
 
 **Idna Reis**
