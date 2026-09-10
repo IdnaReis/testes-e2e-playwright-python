@@ -1,7 +1,6 @@
 # Testes E2E com Playwright + Python
 
 ![Testes E2E](https://github.com/IdnaReis/testes-e2e-playwright-python/actions/workflows/tests.yml/badge.svg)
-
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-45ba4b?logo=playwright&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-0A9EDC?logo=pytest&logoColor=white)
