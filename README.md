@@ -113,6 +113,7 @@ def go_to_payment(self):
         if "payment" in self.page.url:
             return
     raise Exception("Nao foi possivel navegar ate a pagina de pagamento apos varias tentativas")
+```
 
 ## 📊 Relatórios
 
