@@ -1,7 +1,7 @@
 # Testes E2E com Playwright + Python
 
 ![Testes E2E](https://github.com/IdnaReis/testes-e2e-playwright-python/actions/workflows/tests.yml/badge.svg)
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-45ba4b?logo=playwright&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-0A9EDC?logo=pytest&logoColor=white)
 ![BDD](https://img.shields.io/badge/BDD-Gherkin-23D96C?logo=cucumber&logoColor=white)
@@ -24,7 +24,7 @@ Este projeto foi desenvolvido como parte do meu portfólio de QA, com o objetivo
 
 ## 🛠️ Tecnologias utilizadas
 
-- **Python 3.12**
+- **Python 3.12+** (CI em 3.12, também testado localmente em 3.14)
 - **Playwright** — automação de navegador
 - **Pytest** — framework de testes
 - **pytest-playwright** — integração do Playwright com o Pytest
