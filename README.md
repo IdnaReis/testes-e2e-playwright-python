@@ -4,17 +4,19 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-45ba4b?logo=playwright&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-0A9EDC?logo=pytest&logoColor=white)
+![BDD](https://img.shields.io/badge/BDD-Gherkin-23D96C?logo=cucumber&logoColor=white)
 
-Projeto de automação de testes end-to-end (E2E) desenvolvido com **Python**, **Playwright** e **Pytest**, seguindo o padrão de projeto **Page Object Model (POM)**. Os testes cobrem os principais fluxos do site [Automation Exercise](https://automationexercise.com), incluindo cadastro, login, navegação de produtos, carrinho de compras e checkout.
+Projeto de automação de testes end-to-end (E2E) desenvolvido com **Python**, **Playwright** e **Pytest**, seguindo o padrão de projeto **Page Object Model (POM)**. Os testes cobrem os principais fluxos do site [Automation Exercise](https://automationexercise.com), incluindo cadastro, login, navegação de produtos, carrinho de compras e checkout. O fluxo de login também conta com cenários **BDD escritos em Gherkin**, em português.
 
 ## 🎯 Objetivo
 
 Este projeto foi desenvolvido como parte do meu portfólio de QA, com o objetivo de demonstrar habilidades práticas em automação de testes web, incluindo:
 
 - Organização de código com Page Object Model
+- Cenários BDD em Gherkin com pytest-bdd
 - Integração contínua (CI) com GitHub Actions
-- Geração de relatórios de execução em HTML
-- Boas práticas de testes automatizados
+- Geração de relatórios de execução em HTML e evidências (screenshots, vídeos e traces)
+- Investigação e correção de testes instáveis e falhas de pipeline
 
 ## 🛠️ Tecnologias utilizadas
 
@@ -22,13 +24,18 @@ Este projeto foi desenvolvido como parte do meu portfólio de QA, com o objetivo
 - **Playwright** — automação de navegador
 - **Pytest** — framework de testes
 - **pytest-playwright** — integração do Playwright com o Pytest
+- **pytest-bdd** — cenários BDD escritos em Gherkin
 - **pytest-html** — geração de relatórios em HTML
 - **GitHub Actions** — pipeline de integração contínua
 
 ## 📁 Estrutura do projeto
 
 ```
-playwright-e2e-python/
+testes-e2e-playwright-python/
+├── .github/workflows/      # Pipeline de CI (GitHub Actions)
+├── docs/                   # Imagens usadas na documentação
+├── features/               # Cenários BDD escritos em Gherkin
+│   └── login.feature
 ├── pages/                  # Page Objects (elementos e ações de cada página)
 │   ├── base_page.py
 │   ├── cart_page.py
@@ -40,17 +47,17 @@ playwright-e2e-python/
 │   ├── test_cart.py
 │   ├── test_checkout.py
 │   ├── test_login.py
+│   ├── test_login_bdd.py   # Passos (steps) dos cenários BDD
 │   ├── test_login_valid.py
 │   ├── test_products.py
 │   ├── test_products_extra.py
 │   └── test_signup.py
-├── utils/                  # Funções e dados auxiliares
-├── reports/                # Relatórios HTML gerados após a execução
-├── evidencias/             # Capturas de tela de falhas
-├── requirements.txt        # Dependências do projeto
+├── conftest.py             # Fixtures compartilhadas do Pytest
 ├── pytest.ini              # Configurações do Pytest
-└── .github/workflows/      # Pipeline de CI (GitHub Actions)
+└── requirements.txt        # Dependências do projeto
 ```
+
+As pastas `reports/` e `evidencias/` são geradas automaticamente a cada execução e não são versionadas.
 
 ## ✅ Cenários testados
 
@@ -59,6 +66,31 @@ playwright-e2e-python/
 - **Produtos** — busca, visualização de detalhes e listagem
 - **Carrinho** — adição e verificação de itens
 - **Checkout** — finalização do processo de compra
+
+### 🥒 Cenários BDD (Gherkin)
+
+O fluxo de login também foi descrito em linguagem de negócio, em português, para que qualquer pessoa do time (inclusive não técnica) consiga entender o que está sendo testado:
+
+```gherkin
+# language: pt
+
+Funcionalidade: Login
+  Como um usuário do sistema
+  Eu quero fazer login na aplicação
+  Para acessar minha conta
+
+  Cenário: Login com credenciais válidas
+    Dado que estou na página de login
+    Quando informo um email e senha válidos
+    E clico no botão de entrar
+    Então devo ser redirecionado para a página inicial logada
+
+  Cenário: Login com credenciais inválidas
+    Dado que estou na página de login
+    Quando informo um email ou senha inválidos
+    E clico no botão de entrar
+    Então devo ver uma mensagem de erro de login
+```
 
 ## 🚀 Como rodar o projeto localmente
 
@@ -83,12 +115,17 @@ pip install -r requirements.txt
 playwright install --with-deps
 ```
 
-4. Execute os testes:
+4. Execute todos os testes:
 ```bash
 pytest -v
 ```
 
-5. O relatório HTML será gerado em `reports/report.html`.
+Para rodar apenas os cenários BDD:
+```bash
+pytest tests/test_login_bdd.py -v
+```
+
+5. O relatório HTML será gerado em `reports/report.html`, e as evidências da execução (screenshots, vídeos e traces) ficam na pasta `evidencias/`.
 
 ## 🔄 Integração Contínua (CI)
 
@@ -98,9 +135,10 @@ Este projeto conta com um pipeline configurado no **GitHub Actions** (`.github/w
 2. Configuração do ambiente Python
 3. Instalação das dependências
 4. Execução dos testes com Pytest
-   
 
 ## 🧩 Desafios Técnicos
+
+### 1. Teste de checkout instável no CI
 
 Durante o desenvolvimento, identifiquei uma instabilidade intermitente no teste de checkout: ele passava localmente, mas falhava às vezes no pipeline de CI.
 
@@ -118,9 +156,19 @@ def go_to_payment(self):
     raise Exception("Nao foi possivel navegar ate a pagina de pagamento apos varias tentativas")
 ```
 
+### 2. Pipeline quebrado após adicionar os cenários BDD
+
+Depois de adicionar os cenários BDD, o pipeline de CI passou a falhar, embora os testes funcionassem no ambiente onde foram criados — o clássico "funciona na minha máquina".
+
+Comparando o histórico de commits, percebi que o `requirements.txt` não havia sido alterado junto com o BDD: a biblioteca `pytest-bdd` estava instalada localmente, mas não constava na lista de dependências. Como o pipeline instala apenas o que está no `requirements.txt`, os testes BDD quebravam no CI.
+
+**Solução:** adicionei `pytest-bdd==8.1.0` ao `requirements.txt`, mantendo o padrão de versões fixas do projeto, validei a execução dos cenários localmente antes do push e o pipeline voltou a passar.
+
+**Aprendizado:** toda nova biblioteca usada nos testes precisa entrar no `requirements.txt` no mesmo commit, para que o ambiente do CI seja igual ao ambiente local.
+
 ## 📊 Relatórios
 
-Após cada execução, um relatório HTML detalhado é gerado, contendo o status de cada teste e evidências (screenshots) em caso de falha.
+Após cada execução, um relatório HTML detalhado é gerado, contendo o status de cada teste. Além disso, o Playwright registra evidências de cada teste (screenshots, vídeos e traces), que ajudam a investigar falhas.
 
 ![Relatório de testes](docs/relatorio-testes.png)
 
