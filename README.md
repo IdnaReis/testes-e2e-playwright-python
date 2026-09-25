@@ -8,6 +8,10 @@
 
 Projeto de automação de testes end-to-end (E2E) desenvolvido com **Python**, **Playwright** e **Pytest**, seguindo o padrão de projeto **Page Object Model (POM)**. Os testes cobrem os principais fluxos do site [Automation Exercise](https://automationexercise.com), incluindo cadastro, login, navegação de produtos, carrinho de compras e checkout. O fluxo de login também conta com cenários **BDD escritos em Gherkin**, em português.
 
+## 🎬 Demonstração
+
+https://github.com/user-attachments/assets/5d549e11-08ce-4833-bbc4-c3b410f43e72
+
 ## 🎯 Objetivo
 
 Este projeto foi desenvolvido como parte do meu portfólio de QA, com o objetivo de demonstrar habilidades práticas em automação de testes web, incluindo:
